@@ -76,8 +76,20 @@ _makeSuite("Superfluid Vestoooor Tests", (testEnv: TestEnvironment) => {
             const { superfluidVestooor, endTimestamp } =
                 await createVestingContract();
             SuperfluidVestooor = superfluidVestooor;
-            await time.increaseTo(endTimestamp);
+            const ONE_WEEK_IN_SECS = 604800;
+
+            // advance to a week before vesting ends
+            await time.increaseTo(endTimestamp - ONE_WEEK_IN_SECS);
+
+            // stop vesting
             await SuperfluidVestooor.connect(testEnv.admin).stopVesting();
+
+            expect(
+                await testEnv.superToken.balanceOf({
+                    account: testEnv.alice.address,
+                    providerOrSigner: testEnv.alice,
+                })
+            ).to.be.equal(testEnv.constants.DEFAULT_VEST_AMOUNT);
         });
     });
 });
