@@ -1,4 +1,4 @@
-# Superfluid Vestooor Contracts
+# Superfluid Vestooor
 
 ## About
 
@@ -6,17 +6,17 @@ A foundry/Hardhat hybrid project which illustrates a simple implementation of a 
 
 ## Built With
 
--   [@superfluid-finance/ethereum-contracts](https://www.npmjs.com/package/@superfluid-finance/ethereum-contracts)
--   [@superfluid-finance/sdk-core](https://www.npmjs.com/package/@superfluid-finance/sdk-core)
--   [foundry](https://github.com/foundry-rs/foundry)
--   [Hardhat](https://hardhat.org/)
+- [@superfluid-finance/ethereum-contracts](https://www.npmjs.com/package/@superfluid-finance/ethereum-contracts)
+- [@superfluid-finance/sdk-core](https://www.npmjs.com/package/@superfluid-finance/sdk-core)
+- [foundry](https://github.com/foundry-rs/foundry)
+- [Hardhat](https://hardhat.org/)
 
 ## Prerequisites
 
 In order to run this project, you need to have the following dependencies installed on your computer:
 
--   [foundry](https://github.com/foundry-rs/foundry)
--   [yarn](https://yarnpkg.com/getting-started/install) or you can just use [npm](https://www.npmjs.com/package/npm)
+- [foundry](https://github.com/foundry-rs/foundry)
+- [yarn](https://yarnpkg.com/getting-started/install) or you can just use [npm](https://www.npmjs.com/package/npm)
 
 Run `npm install`, `yarn install` or `pnpm install` to install packages.
 
@@ -72,11 +72,11 @@ If you want to manually verify contracts, you can use the following command: `np
 
 ### States
 
--   Initial State: `[I]`
--   Vesting State: `[V]`
--   Vesting Paused State: `[P]`
--   Vesting Endable Window: `[W]`
--   Vesting Ended State: `[E]`
+- Initial State: `[I]`
+- Vesting State: `[V]`
+- Vesting Paused State: `[P]`
+- Vesting Endable Window: `[W]`
+- Vesting Ended State: `[E]`
 
 ### Initial State [I]
 
@@ -93,14 +93,14 @@ It should **not** be possible to call any of the functions in this contract in t
 
 **Functions**
 
--   `initialize`
-    -   Transitions contract from **Initial State** into **Vesting State**
-    -   Has direct impact on when **Vesting Endable Window** and **Vesting Ended State** states will be reached based on the state variables passed from the factory and set for this instance in initialization
-    -   Cannot be called once it has been called, will result in a revert with `"Initializable: contract is already initialized"`
+- `initialize`
+  - Transitions contract from **Initial State** into **Vesting State**
+  - Has direct impact on when **Vesting Endable Window** and **Vesting Ended State** states will be reached based on the state variables passed from the factory and set for this instance in initialization
+  - Cannot be called once it has been called, will result in a revert with `"Initializable: contract is already initialized"`
 
 **Transitions**
 
--   `[I]` => `[V]`: This occurs at the end of `initialize`.
+- `[I]` => `[V]`: This occurs at the end of `initialize`.
 
 ### Vesting State [V]
 
@@ -113,16 +113,16 @@ There is an active flow where an instance of the `SuperfluidVestooor` is the sen
 
 **Functions**
 
--   `restartVesting`
-    -   This function will revert with the custom error: `VESTING_IN_PROGRESS()`.
--   `stopVesting`
-    -   This function will revert with the custom error: `VESTING_END_TOO_EARLY()`.
+- `restartVesting`
+  - This function will revert with the custom error: `VESTING_IN_PROGRESS()`.
+- `stopVesting`
+  - This function will revert with the custom error: `VESTING_END_TOO_EARLY()`.
 
 **Transitions**
 
--   `[V]` => `[P]`: Occurs when the receiver (vestee) deletes the vesting flow from the `SuperfluidVestooor` instance
--   `[V]` => `[W]`: Occurs once `canStopVesting` is true (when `block.timestamp` is greater or equal to 7 days (in seconds) before the `vestingEndTimestamp` set in the initialization
--   `[V]` => `[E]`: Occurs when someone calls `stopVesting` **OR** the flow is liquidated due to the contract instance becoming critical (available balance < 0)
+- `[V]` => `[P]`: Occurs when the receiver (vestee) deletes the vesting flow from the `SuperfluidVestooor` instance
+- `[V]` => `[W]`: Occurs once `canStopVesting` is true (when `block.timestamp` is greater or equal to 7 days (in seconds) before the `vestingEndTimestamp` set in the initialization
+- `[V]` => `[E]`: Occurs when someone calls `stopVesting` **OR** the flow is liquidated due to the contract instance becoming critical (available balance < 0)
 
 ### Vesting Paused State [P]
 
@@ -135,17 +135,17 @@ The receiver (vestee) has deleted the flow from the `SuperfluidVestooor` instanc
 
 **Functions**
 
--   `restartVesting`
-    -   This function can cause a state change to `Vesting Ended State` if `canStopVesting` is true
-    -   This function can cause a state change to `Vesting State` if `canStopVesting` is false
--   `stopVesting`
-    -   This function will revert because there is no flow to delete
+- `restartVesting`
+  - This function can cause a state change to `Vesting Ended State` if `canStopVesting` is true
+  - This function can cause a state change to `Vesting State` if `canStopVesting` is false
+- `stopVesting`
+  - This function will revert because there is no flow to delete
 
 **Transitions**
 
--   `[P]` => `[V]`: Occurs when `restartVesting` is called and `canStopVesting` is false
--   `[P]` => `[E]`: Occurs when `restartVesting` is called and `canStopVesting` is true
--   `[P]` => `[W]`: Occurs once `canStopVesting` is true
+- `[P]` => `[V]`: Occurs when `restartVesting` is called and `canStopVesting` is false
+- `[P]` => `[E]`: Occurs when `restartVesting` is called and `canStopVesting` is true
+- `[P]` => `[W]`: Occurs once `canStopVesting` is true
 
 ### Vesting Endable Window [W]
 
@@ -158,15 +158,15 @@ The `canStopVesting(): block.timestamp >= vestingEndTimestamp - 7 days` returns 
 
 **Functions**
 
--   `restartVesting`
-    -   This function can revert with the custom error: `VESTING_IN_PROGRESS()` if a stream exists.
-    -   This function can cause a state change to `Vesting Ended State` if `canStopVesting` is true
--   `stopVesting`
-    -   This function can cause a state change to `Vesting Ended State`
+- `restartVesting`
+  - This function can revert with the custom error: `VESTING_IN_PROGRESS()` if a stream exists.
+  - This function can cause a state change to `Vesting Ended State` if `canStopVesting` is true
+- `stopVesting`
+  - This function can cause a state change to `Vesting Ended State`
 
 **Transitions**
 
--   `[W]` => `[E]`: Occurs once `canStopVesting` is true and either `restartVesting` is called **AND** no outgoing stream exists **OR** if `stopVesting` is called
+- `[W]` => `[E]`: Occurs once `canStopVesting` is true and either `restartVesting` is called **AND** no outgoing stream exists **OR** if `stopVesting` is called
 
 ### Vesting Ended State
 
@@ -179,7 +179,7 @@ The SuperToken balance of the `SuperfluidVestooor` instance is <= 0 (only < 0 in
 
 **Functions**
 
--   `restartVesting`
-    -   This function will just transfer 0 tokens to the owner and emit an event.
--   `stopVesting`
-    -   This function will revert because there is no flow to delete
+- `restartVesting`
+  - This function will just transfer 0 tokens to the owner and emit an event.
+- `stopVesting`
+  - This function will revert because there is no flow to delete
