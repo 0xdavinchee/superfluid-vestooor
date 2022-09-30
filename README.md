@@ -68,7 +68,7 @@ If you want to manually verify contracts, you can use the following command: `np
 ## SuperfluidVestooor State Machine
 
 **Plant UML Diagram**
-![Alt text here](plantuml/summary.svg)
+![Alt text here](evm-contracts/plantuml/summary.svg)
 
 ### States
 
@@ -81,7 +81,7 @@ If you want to manually verify contracts, you can use the following command: `np
 ### Initial State [I]
 
 **Plant UML Diagram**
-![Alt text here](plantuml/initial_state.svg)
+![Alt text here](evm-contracts/plantuml/initial_state.svg)
 
 **Description**
 
@@ -105,7 +105,7 @@ It should **not** be possible to call any of the functions in this contract in t
 ### Vesting State [V]
 
 **Plant UML Diagram**
-![Alt text here](plantuml/vesting_state.svg)
+![Alt text here](evm-contracts/plantuml/vesting_state.svg)
 
 **Description**
 
@@ -127,7 +127,7 @@ There is an active flow where an instance of the `SuperfluidVestooor` is the sen
 ### Vesting Paused State [P]
 
 **Plant UML Diagram**
-![Alt text here](plantuml/vesting_paused_state.svg)
+![Alt text here](evm-contracts/plantuml/vesting_paused_state.svg)
 
 **Description**
 
@@ -150,7 +150,7 @@ The receiver (vestee) has deleted the flow from the `SuperfluidVestooor` instanc
 ### Vesting Endable Window [W]
 
 **Plant UML Diagram**
-![Alt text here](plantuml/vesting_endable_state.svg)
+![Alt text here](evm-contracts/plantuml/vesting_endable_state.svg)
 
 **Description**
 
@@ -171,7 +171,7 @@ The `canStopVesting(): block.timestamp >= vestingEndTimestamp - 7 days` returns 
 ### Vesting Ended State
 
 **Plant UML Diagram**
-![Alt text here](plantuml/vesting_ended_state.svg)
+![Alt text here](evm-contracts/plantuml/vesting_ended_state.svg)
 
 **Description**
 
