@@ -8,7 +8,7 @@ import TestTokenArtifact from "@superfluid-finance/ethereum-contracts/build/cont
 import { Framework, WrapperSuperToken } from "@superfluid-finance/sdk-core";
 import { TestToken } from "@superfluid-finance/sdk-core/dist/module/typechain";
 import { Contract } from "ethers";
-import { ethers } from "hardhat";
+import hre, { ethers } from "hardhat";
 
 import { deployFrameworkAndSuperTokens } from "../scripts/deploySuperfluidFramework";
 import { deploySuperfluidVestooor } from "../scripts/deploySuperfluidVestooor";
@@ -90,8 +90,11 @@ export const initializeTestEnvironment = async () => {
 
     testEnv.SuperfluidVestooor = await deploySuperfluidVestooor(testEnv.admin);
     testEnv.SuperfluidVestooorFactory = await deployVestingFactoryContract(
+        hre,
         testEnv.admin,
-        testEnv.SuperfluidVestooor.address
+        testEnv.SuperfluidVestooor.address,
+        testEnv.superToken.address,
+        testEnv.framework
     );
 };
 

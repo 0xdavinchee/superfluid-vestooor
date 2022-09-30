@@ -12,13 +12,14 @@
         "dev": "nodemon -e sol,js,ts -x \"yarn test\"",
         "format": "npx prettier --write 'contracts/**/*.sol' '**/*.ts'",
         "test": "npx hardhat test --network localhost",
+        "test-parallel": "yarn test --parallel",
+        "demo": "npx hardhat run scripts/setupDemo.ts --network localhost",
         "gas": "REPORT_GAS=true yarn test",
         "lint": "eslint test --ext .ts",
         "fix": "yarn lint --fix",
         "coverage": "npx hardhat coverage",
         "types": "npx hardhat typechain",
-        "clean": "npx hardhat clean && rm -rf node_modules && rm -rf typechain-types",
-        "test-parallel": "npm test --parallel"
+        "clean": "npx hardhat clean && rm -rf node_modules && rm -rf typechain-types"
     },
     "devDependencies": {
         "@ethersproject/abi": "^5.7.0",

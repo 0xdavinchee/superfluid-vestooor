@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="208px" preserveAspectRatio="none" style="width:1933px;height:208px;background:#FFFFFF;" version="1.1" viewBox="0 0 1933 208" width="1933px" zoomAndPan="magnify"><defs/><g><g id="Revert"><rect fill="#F1F1F1" height="50.2656" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="134" x="7" y="152"/><line style="stroke:#181818;stroke-width:0.5;" x1="7" x2="141" y1="178.2969" y2="178.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49" x="49.5" y="169.9951">Revert</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="114" x="12" y="194.4355">DOES_NOT_EXIST()</text></g><g id="P"><rect fill="#F1F1F1" height="50.2656" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="526" x="608" y="7"/><line style="stroke:#181818;stroke-width:0.5;" x1="608" x2="1134" y1="33.2969" y2="33.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109" x="816.5" y="24.9951">Vesting Paused</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="506" x="613" y="49.4355">The receiver (vestee) has deleted the flow from the `SuperfluidVestooor` instance.</text></g><g id="V"><rect fill="#F1F1F1" height="50" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="75" x="567.5" y="152"/><line style="stroke:#181818;stroke-width:0.5;" x1="567.5" x2="642.5" y1="178.2969" y2="178.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="577.5" y="169.9951">Vesting</text></g><g id="W"><rect fill="#F1F1F1" height="50" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="197" x="1039.5" y="152"/><line style="stroke:#181818;stroke-width:0.5;" x1="1039.5" x2="1236.5" y1="178.2969" y2="178.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="177" x="1049.5" y="169.9951">Vesting Endable Window</text></g><g id="E"><rect fill="#F1F1F1" height="50" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="124" x="1398" y="152"/><line style="stroke:#181818;stroke-width:0.5;" x1="1398" x2="1522" y1="178.2969" y2="178.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="104" x="1408" y="169.9951">Vesting Ended</text></g><!--MD5=[f440154a5e779dc80cf5c6d04a4115df]
+link P to V--><g id="link_P_V"><path d="M666.436,57.078 C636.58,64.576 612.376,74.334 602,87 C588.657,103.2883 590.36,127.4358 594.877,146.4699 " fill="none" id="P-to-V" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="596.215,151.6921,597.8549,141.9807,594.9734,146.8487,590.1055,143.9672,596.215,151.6921" style="stroke:#181818;stroke-width:1.0;"/><path d="M607,92 L607,117 L1090,117 L1090,102 L1080,92 L607,92 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1080,92 L1080,102 L1090,102 L1080,92 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="462" x="613" y="109.0669">Occurs when `restartVesting()` is called and `canStopVesting()` is false</text></g><!--MD5=[f884a522799d1c1af466ab1b000ae896]
+link P to E--><g id="link_P_E"><path d="M1134.32,47.997 C1260.51,57.213 1389.6,70.437 1414,87 C1434.3,100.78 1446.19,126.3924 1452.78,146.6157 " fill="none" id="P-to-E" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1454.34,151.6306,1455.4795,141.8479,1452.8516,146.8573,1447.8421,144.2294,1454.34,151.6306" style="stroke:#181818;stroke-width:1.0;"/><path d="M1448,92 L1448,117 L1926,117 L1926,102 L1916,92 L1448,92 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1916,92 L1916,102 L1926,102 L1916,92 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="457" x="1454" y="109.0669">Occurs when `restartVesting()` is called and `canStopVesting()` is true</text></g><!--MD5=[f438c26f7b715e08b8c4ab25d1b0b87b]
+link P to W--><g id="link_P_W"><path d="M1047.69,57.013 C1066.26,64.576 1083.85,74.363 1099,87 C1117.03,102.0415 1126.99,127.0403 1132.31,146.7202 " fill="none" id="P-to-W" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1133.57,151.5996,1135.1986,141.8863,1132.3228,146.7576,1127.4515,143.8818,1133.57,151.5996" style="stroke:#181818;stroke-width:1.0;"/><path d="M1129,92 L1129,117 L1401,117 L1401,102 L1391,92 L1129,92 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1391,92 L1391,102 L1401,102 L1391,92 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="251" x="1135" y="109.0669">Occurs once `canStopVesting()` is true</text></g><!--MD5=[5d82a3c92642da5152a82c89567135ca]
+link P to Revert--><g id="link_P_Revert"><path d="M607.802,35.832 C397.528,40.623 131.758,53.356 93,87 C76.352,101.451 72.2074,126.589 71.8821,146.4708 " fill="none" id="P-to-Revert" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="71.8802,151.6635,75.8802,142.6635,71.8802,146.6635,67.8802,142.6635,71.8802,151.6635" style="stroke:#181818;stroke-width:1.0;"/><path d="M98,92 L98,117 L579,117 L579,102 L569,92 L98,92 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M569,92 L569,102 L579,102 L569,92 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="460" x="104" y="109.0669">Occurs once `stopVesting()` is called because there is no flow to delete</text></g><!--MD5=[d86a2b3cf6c04ce353e1f1b313161310]
+@startuml
+state P {
+state "Vesting Paused" as P
+}
+state V {
+state "Vesting" as V
+}
+state W {
+state "Vesting Endable Window" as W
+}
+state E {
+state "Vesting Ended" as E
+}
+P - -> V
+P :The receiver (vestee) has deleted the flow from the `SuperfluidVestooor` instance.
+
+note on link
+Occurs when `restartVesting()` is called and `canStopVesting()` is false
+end note
+
+P - -> E
+
+note on link
+Occurs when `restartVesting()` is called and `canStopVesting()` is true
+end note
+
+P - -> W
+
+note on link
+Occurs once `canStopVesting()` is true
+end note
+
+P - -> Revert
+Revert: DOES_NOT_EXIST()
+note on link
+Occurs once `stopVesting()` is called because there is no flow to delete
+end note
+@enduml
+
+PlantUML version 1.2022.8beta11(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

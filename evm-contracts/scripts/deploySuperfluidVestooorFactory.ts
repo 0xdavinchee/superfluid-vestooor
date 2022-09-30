@@ -1,6 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { ethers } from "hardhat";
-import { _console } from "../test/utils";
+import { Framework } from "@superfluid-finance/sdk-core";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { verifyContract } from "./verify";
 
 /**
  * Deploys the Superfluid Vestooor Factory contract
@@ -10,22 +11,43 @@ import { _console } from "../test/utils";
  * @returns SuperfluidVestooorFactory Contract
  */
 export async function deployVestingFactoryContract(
+    hre: HardhatRuntimeEnvironment,
     signer: SignerWithAddress,
-    vestingImplAddress: string
+    vestingImplAddress: string,
+    tokenAddress: string,
+    framework: Framework
 ) {
-    const SuperfluidVestooorFactoryFactory = await ethers.getContractFactory(
-        "SuperfluidVestooorFactory"
-    );
+    const SuperfluidVestooorFactoryFactory =
+        await hre.ethers.getContractFactory("SuperfluidVestooorFactory");
     const SuperfluidVestooorFactoryContract =
         await SuperfluidVestooorFactoryFactory.connect(signer).deploy(
-            vestingImplAddress
+            vestingImplAddress,
+            tokenAddress,
+            framework.cfaV1.contract.address,
+            framework.host.contract.address
         );
-    const SuperfluidVestooorFactory =
-        await SuperfluidVestooorFactoryContract.deployed();
-    _console(
+
+    console.log(
         "Deployed SuperfluidVestooorFactory at:",
-        SuperfluidVestooorFactory.address
+        SuperfluidVestooorFactoryContract.address
     );
 
-    return SuperfluidVestooorFactory;
+    // programmatically verify the contract in production
+    // https://hardhat.org/plugins/nomiclabs-hardhat-etherscan.html#using-programmatically
+    if (
+        process.env.VERIFY_CONTRACTS ||
+        (hre.network.name !== "hardhat" && hre.network.name !== "localhost")
+    ) {
+        console.log("Awaiting 6 confirmations before verification...");
+        await SuperfluidVestooorFactoryContract.deployTransaction.wait(6);
+
+        await verifyContract(hre, SuperfluidVestooorFactoryContract.address, [
+            vestingImplAddress,
+            tokenAddress,
+            framework.cfaV1.contract.address,
+            framework.host.contract.address,
+        ]);
+    }
+
+    return SuperfluidVestooorFactoryContract;
 }

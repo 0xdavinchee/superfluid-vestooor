@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="667px" preserveAspectRatio="none" style="width:1030px;height:667px;background:#FFFFFF;" version="1.1" viewBox="0 0 1030 667" width="1030px" zoomAndPan="magnify"><defs/><g><ellipse cx="388.8877" cy="16" fill="#222222" rx="10" ry="10" style="stroke:none;stroke-width:1.0;"/><g id="I"><rect fill="#F1F1F1" height="50" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="60" x="358.8877" y="103"/><line style="stroke:#181818;stroke-width:0.5;" x1="358.8877" x2="418.8877" y1="129.2969" y2="129.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="40" x="368.8877" y="120.9951">Initial</text></g><g id="V"><rect fill="#F1F1F1" height="50" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="75" x="351.3877" y="230"/><line style="stroke:#181818;stroke-width:0.5;" x1="351.3877" x2="426.3877" y1="256.2969" y2="256.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="361.3877" y="247.9951">Vesting</text></g><g id="P"><rect fill="#F1F1F1" height="50" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="129" x="11.3877" y="357"/><line style="stroke:#181818;stroke-width:0.5;" x1="11.3877" x2="140.3877" y1="383.2969" y2="383.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109" x="21.3877" y="374.9951">Vesting Paused</text></g><g id="W"><rect fill="#F1F1F1" height="50" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="197" x="394.3877" y="484"/><line style="stroke:#181818;stroke-width:0.5;" x1="394.3877" x2="591.3877" y1="510.2969" y2="510.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="177" x="404.3877" y="501.9951">Vesting Endable Window</text></g><g id="E"><rect fill="#F1F1F1" height="50" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="124" x="430.8877" y="611"/><line style="stroke:#181818;stroke-width:0.5;" x1="430.8877" x2="554.8877" y1="637.2969" y2="637.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="104" x="440.8877" y="628.9951">Vesting Ended</text></g><!--MD5=[fca122afa623a75fa7f23d1f1127360e]
+link *start to I--><g id="link_*start_I"><path d="M388.8877,26.002 C388.8877,41.458 388.8877,73.685 388.8877,97.6 " fill="none" id="*start-to-I" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="388.8877,102.873,392.8877,93.873,388.8877,97.873,384.8877,93.873,388.8877,102.873" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="267" x="389.8877" y="69.0669">Clone created + tokens sent from factory</text></g><!--MD5=[f962f80b0f727d57b5011c5e98d75ce7]
+link I to V--><g id="link_I_V"><path d="M388.8877,153.101 C388.8877,173.593 388.8877,203.076 388.8877,224.884 " fill="none" id="I-to-V" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="388.8877,229.973,392.8877,220.973,388.8877,224.973,384.8877,220.973,388.8877,229.973" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="183" x="389.8877" y="196.0669">Contract initialized in factory</text></g><!--MD5=[25c99b67b0020eda6d27124bf055952d]
+link V to P--><g id="link_V_P"><path d="M351.2047,255.624 C266.3097,255.663 64.1919,261.016 21.8877,310 C9.9435,323.83 20.4834,339.996 35.3175,353.405 " fill="none" id="V-to-P" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="39.1704,356.752,34.9995,347.8299,35.3958,353.4729,29.7529,353.8693,39.1704,356.752" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="138" x="22.8877" y="323.0669">Receiver deletes flow</text></g><!--MD5=[f440154a5e779dc80cf5c6d04a4115df]
+link P to V--><g id="link_P_V"><path d="M113.3217,356.861 C137.7927,341.856 170.8607,323.013 201.8877,310 C249.7537,289.924 307.5017,274.499 346.0417,265.371 " fill="none" id="P-to-V" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="351.1137,264.18,341.4376,262.3433,346.2461,265.323,343.2664,270.1314,351.1137,264.18" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="344" x="202.8877" y="323.0669">restartVesting() called when canStopVesting() is false</text></g><!--MD5=[c997ea498c5c69d63e4081bce44aba01]
+link V to W--><g id="link_V_W"><path d="M426.5297,256.605 C465.1357,259.486 523.4387,270.606 551.8877,310 C589.3567,361.885 577.6807,395.428 551.8877,454 C547.5597,463.829 540.4607,472.648 532.6617,480.17 " fill="none" id="V-to-W" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="528.7857,483.757,538.1083,480.5807,532.4557,480.3613,532.6752,474.7087,528.7857,483.757" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="293" x="576.8877" y="386.5669">block.timestamp &lt;= vestingEndDate - 7 days</text></g><!--MD5=[8d1c0ea81888e075cf1c764c1a44d804]
+link V to E--><g id="link_V_E"><path d="M426.5737,257.848 C531.2397,263.845 821.5497,286.638 878.8877,357 C981.9027,483.415 696.3487,580.2108 560.3677,617.8692 " fill="none" id="V-to-E" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="555.1977,619.2925,564.9366,620.7602,560.0184,617.9654,562.8132,613.0471,555.1977,619.2925" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="127" x="895.8877" y="450.0669">stopVesting() called</text></g><!--MD5=[f438c26f7b715e08b8c4ab25d1b0b87b]
+link P to W--><g id="link_P_W"><path d="M67.0288,407.307 C63.169,422.571 61.7243,441.639 72.8877,454 C116.9047,502.738 301.9037,474.514 366.8877,484 C374.1387,485.058 381.6067,486.241 389.1177,487.499 " fill="none" id="P-to-W" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="394.3217,488.381,386.1168,482.9331,389.392,487.5453,384.7798,490.8206,394.3217,488.381" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="293" x="73.8877" y="450.0669">block.timestamp &lt;= vestingEndDate - 7 days</text></g><!--MD5=[b2ff00800dfd1810cad1f0619c7de5fd]
+link W to P--><g id="link_W_P"><path d="M455.1807,483.919 C426.3307,465.87 388.7267,443.253 371.8877,437 C297.3457,409.321 206.7957,395.466 145.6307,388.781 " fill="none" id="W-to-P" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="140.5427,388.235,149.0638,393.1738,145.5141,388.7693,149.9186,385.2196,140.5427,388.235" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="138" x="405.8877" y="450.0669">Receiver deletes flow</text></g><!--MD5=[f884a522799d1c1af466ab1b000ae896]
+link P to E--><g id="link_P_E"><path d="M57.8542,407.119 C36.1141,439.37 6,496.786 35.8877,534 C84.0171,593.9277 310.5967,620.4409 425.5867,630.1981 " fill="none" id="P-to-E" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="430.6397,630.6222,422.0061,625.8828,425.6573,630.2036,421.3365,633.8547,430.6397,630.6222" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="339" x="36.8877" y="513.5669">restartVesting() called when canStopVesting() is true</text></g><!--MD5=[fe608f199843143e85172caf5bef7097]
+link W to E--><g id="link_W_E"><path d="M492.8877,534.101 C492.8877,554.593 492.8877,584.0764 492.8877,605.8844 " fill="none" id="W-to-E" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="492.8877,610.9727,496.8877,601.9727,492.8877,605.9727,488.8877,601.9727,492.8877,610.9727" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="127" x="493.8877" y="577.0669">stopVesting() called</text></g><!--MD5=[8f5399e6bef004faf3c0439a53d231b1]
+@startuml
+state I {
+state "Initial" as I
+}
+state V {
+state "Vesting" as V
+}
+state P {
+state "Vesting Paused" as P
+}
+state W {
+state "Vesting Endable Window" as W
+}
+state E {
+state "Vesting Ended" as E
+}
+[*] - -> I : Clone created + tokens sent from factory
+I - -> V : Contract initialized in factory
+V - -> P : Receiver deletes flow
+V - -> W : block.timestamp <= vestingEndDate - 7 days
+V - -> E : stopVesting() called 
+
+P - -> V : restartVesting() called when canStopVesting() is false
+P - -> W : block.timestamp <= vestingEndDate - 7 days
+P - -> E : restartVesting() called when canStopVesting() is true
+
+W - -> E : stopVesting() called
+W - -> P : Receiver deletes flow
+@enduml
+
+PlantUML version 1.2022.8beta11(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

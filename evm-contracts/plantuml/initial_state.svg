@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:1390px;height:331px;background:#FFFFFF;" version="1.1" viewBox="0 0 1390 331" width="1390px" zoomAndPan="magnify"><defs/><g><ellipse cx="409" cy="16" fill="#222222" rx="10" ry="10" style="stroke:none;stroke-width:1.0;"/><g id="Revert"><rect fill="#F1F1F1" height="50.2656" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="276" x="38" y="275"/><line style="stroke:#181818;stroke-width:0.5;" x1="38" x2="314" y1="301.2969" y2="301.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49" x="151.5" y="292.9951">Revert</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="256" x="43" y="317.4355">"Initializable: contract is already initialized"</text></g><g id="I"><rect fill="#F1F1F1" height="78.2031" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="804" x="7" y="87"/><line style="stroke:#181818;stroke-width:0.5;" x1="7" x2="811" y1="113.2969" y2="113.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="40" x="389" y="104.9951">Initial</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="784" x="12" y="129.4355">The storage state is uninitialized and there is no flow, but it should have balance of tokens equal to whatever the factory dictated.</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="764" x="12" y="143.4043">The contract is only for this initial state briefly as we call `initialize()` in the same transaction that we create the clone instance.</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="51" x="12" y="157.373">It should</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="25" x="67" y="157.373">not</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="573" x="96" y="157.373">be possible to call any of the functions in this contract in the initial state other than `initialize()`.</text></g><g id="V"><rect fill="#F1F1F1" height="50" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="75" x="605.5" y="275"/><line style="stroke:#181818;stroke-width:0.5;" x1="605.5" x2="680.5" y1="301.2969" y2="301.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="615.5" y="292.9951">Vesting</text></g><!--MD5=[fca122afa623a75fa7f23d1f1127360e]
+link *start to I--><g id="link_*start_I"><path d="M409,26.208 C409,38.529 409,61.21 409,81.735 " fill="none" id="*start-to-I" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="409,86.9,413,77.9,409,81.9,405,77.9,409,86.9" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[f962f80b0f727d57b5011c5e98d75ce7]
+link I to V--><g id="link_I_V"><path d="M562.11,165.161 C577.444,173.272 591.819,183.098 604,195 C624.389,214.92 634.235,246.5111 638.916,269.6531 " fill="none" id="I-to-V" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="639.891,274.7501,642.1276,265.1586,638.951,269.8393,634.2703,266.6626,639.891,274.7501" style="stroke:#181818;stroke-width:1.0;"/><path d="M638,200 L638,240 L1383,240 L1383,210 L1373,200 L638,200 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1373,200 L1373,210 L1383,210 L1373,200 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="326" x="644" y="217.0669">- State transition occurs when `initialize()` is called</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="306" x="644" y="232.1997">- Sets state variables which impact transition to</text><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="183" x="954" y="232.1997">Vesting Endable Window</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="24" x="1141" y="232.1997">and</text><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="155" x="1169" y="232.1997">Vesting Ended State</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="40" x="1328" y="232.1997">states</text></g><!--MD5=[ec351ab24ece9653454fd802fe4429a2]
+link I to Revert--><g id="link_I_Revert"><path d="M226.233,165.094 C201.395,173.716 181.493,183.714 173,195 C157.046,216.2 160.388,247.3122 166.135,269.9813 " fill="none" id="I-to-Revert" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="167.473,274.9719,169.0061,265.2431,166.1783,270.1424,161.2789,267.3146,167.473,274.9719" style="stroke:#181818;stroke-width:1.0;"/><path d="M178,207.5 L178,232.5 L595,232.5 L595,217.5 L585,207.5 L178,207.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M585,207.5 L585,217.5 L595,217.5 L585,207.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="396" x="184" y="224.5669">Cannot be called once it has been called, will result in a revert</text></g><!--MD5=[2821e9969fe5b26097773e10dc2a6590]
+@startuml
+[*] - -> I
+state I {
+ state "Initial" as I
+}
+state V {
+ state "Vesting" as V
+}
+I - -> V 
+I : The storage state is uninitialized and there is no flow, but it should have balance of tokens equal to whatever the factory dictated.
+
+I : The contract is only for this initial state briefly as we call `initialize()` in the same transaction that we create the clone instance.
+
+I: It should **not** be possible to call any of the functions in this contract in the initial state other than `initialize()`.
+note on link 
+  - State transition occurs when `initialize()` is called 
+  - Sets state variables which impact transition to **Vesting Endable Window** and **Vesting Ended State** states
+end note
+
+I - -> Revert
+Revert: "Initializable: contract is already initialized"
+note on link 
+Cannot be called once it has been called, will result in a revert
+end note
+@enduml
+
+PlantUML version 1.2022.8beta11(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
