@@ -3,7 +3,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import { config as dotenvConfig } from "dotenv";
 import "@nomiclabs/hardhat-web3";
 import { ethers } from "ethers";
-import { deployVestingFactoryContract } from "./scripts/deploySuperfluidVestooorFactory";
+import { deployVestingFactoryCreatorContract } from "./scripts/deploySuperfluidVestooorFactoryCreator";
 import { Framework } from "@superfluid-finance/sdk-core";
 
 // .env Initialization
@@ -16,7 +16,7 @@ try {
 }
 
 // Hardhat Tasks
-task("deploy-factory", "Deploy the SuperfluidVestooorFactory contract")
+task("deploy-factory", "Deploy the SuperfluidVestooorFactoryCreator contract")
     .addParam(
         "implementation",
         "The SuperfluidVestooor implementation contract address",
@@ -35,17 +35,16 @@ task("deploy-factory", "Deploy the SuperfluidVestooorFactory contract")
             provider: hre.ethers.provider,
             chainId: hre.network.config.chainId!,
         });
-        await deployVestingFactoryContract(
+        await deployVestingFactoryCreatorContract(
             hre,
             signer,
             implementation,
-            token,
             framework
         );
     });
 
 const config: HardhatUserConfig = {
-    solidity: "0.8.17",
+    solidity: "0.8.16",
     networks: {
         hardhat: {
             forking: {
