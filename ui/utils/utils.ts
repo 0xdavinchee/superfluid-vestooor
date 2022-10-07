@@ -1,4 +1,5 @@
 import ethers, { ContractReceipt, ContractTransaction } from "ethers";
+import { Balance } from "../interfaces/interfaces";
 
 export const getInstanceAddresses = async (receipt: ContractReceipt) => {
   const { events } = receipt;
@@ -12,4 +13,15 @@ export const getInstanceAddresses = async (receipt: ContractReceipt) => {
     return instanceAddresses;
   }
   return [ethers.constants.AddressZero];
+};
+
+export const getTotalFlowedBalance = (
+  totalFlowedData: Balance,
+  flowRate: string,
+  time: Date
+) => {
+  return (
+    totalFlowedData.balance -
+    (time.getTime() / 1000 - totalFlowedData.timestamp) * Number(flowRate)
+  );
 };

@@ -6,60 +6,62 @@ import { useEffect, useMemo, useState } from "react";
 import styles from "../styles/Home.module.css";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
 import {
-  SuperfluidVestooor,
   SuperfluidVestooorFactory,
+  SuperfluidVestooorFactoryCreator,
+  SuperfluidVestooorFactoryCreator__factory,
+  SuperfluidVestooorFactory__factory,
+  SuperfluidVestooor__factory,
 } from "../typechain-types";
-import SuperfluidVestooorFactoryABI from "../artifacts/contracts/SuperfluidVestooorFactory.sol/SuperfluidVestooorFactory.json";
-import SuperfluidVestooorABI from "../artifacts/contracts/SuperfluidVestooor.sol/SuperfluidVestooor.json";
 import { useAccount, useProvider, useSigner } from "wagmi";
-import { ERC20Token, Framework } from "@superfluid-finance/sdk-core";
+import {
+  ERC20Token,
+  Framework,
+  WrapperSuperToken,
+} from "@superfluid-finance/sdk-core";
 import { IFrameworkOptions } from "@superfluid-finance/sdk-core/dist/module/Framework";
-import { getInstanceAddresses } from "../utils/utils";
+import { getInstanceAddresses, getTotalFlowedBalance } from "../utils/utils";
+import {
+  Balance,
+  FlowingBalanceDetails,
+  UserSuperTokenInfo,
+  TokenFactoryInfo,
+  VestingInstanceDetails,
+} from "../interfaces/interfaces";
+import { Input } from "../components/Input";
 
-// @note TODO build a map using Framework.query for listed super tokens
-const symbolToFactoryAddressMap = new Map([
-  ["fDAIx", "0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E"],
-  ["fUSDCx", "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690"],
-]);
+const DEFAULT_VESTING_INSTANCE_DETAILS = {
+  vestee: "",
+  amountToVest: "",
+  vestingEndDate: new Date(),
+  tokenSymbol: "",
+  tokenName: "",
+  flowingBalanceDetails: { balance: 0, balanceTimestamp: 0, flowRate: "" },
+};
 
-interface SuperTokenInfo {
-  readonly userBalance: string;
-  readonly name: string;
-  readonly underlyingBalance: string;
-  // Amount approved to the vesting contract
-  readonly availableToVest: string;
-}
-
-interface FlowingBalanceDetails {
-  readonly balance: number;
-  readonly balanceTimestamp: number;
-  readonly flowRate: string;
-}
-
-interface Balance {
-  readonly balance: number;
-  readonly timestamp: number;
-}
-
-interface VestingInstanceDetails {
-  readonly vestee: string;
-  readonly amountToVest: string;
-  readonly vestingEndDate: Date;
-  readonly tokenSymbol: string;
-  readonly tokenName: string;
-  readonly flowingBalanceDetails: FlowingBalanceDetails;
-}
+// @note This is the "pseudo-official factory creator address"
+// please only change this if you understand the full implications
+// https://goerli.etherscan.io/address/0x286ad03ea8a79dbca8ae17d0b0c2cf9e62e04e56
+const GOERLI_VESTOOOR_FACTORY_CREATOR_ADDRESS =
+  "0x286aD03EA8a79dBCA8AE17d0b0C2Cf9E62e04e56";
 
 const Home: NextPage = () => {
+  const [loading, setLoading] = useState(true);
   const [totalVestAmount, setTotalVestAmount] = useState("");
-  const [selectedTokenSymbol, setSelectedTokenSymbol] = useState("");
+  const [selectedTokenAddress, setSelectedTokenAddress] = useState("");
   const [selectedVestee, setSelectedVestee] = useState("");
   const [framework, setFramework] = useState<Framework>();
   const [underlyingToken, setUnderlyingToken] = useState<ERC20Token>();
-  const [tokenInfo, setTokenInfo] = useState<SuperTokenInfo>();
+  const [tokenInfo, setTokenInfo] = useState<UserSuperTokenInfo>();
   const [instanceAddresses, setInstanceAddresses] = useState<string[]>([]);
   const [factoryContract, setFactoryContract] =
     useState<SuperfluidVestooorFactory>();
+  const [requiresFactoryCreation, setRequiresFactoryCreation] = useState(true);
+  const [factoryCreatorContract, setFactoryCreatorContract] =
+    useState<SuperfluidVestooorFactoryCreator>();
+  const [
+    tokenAddressToTokenFactoryInfoMap,
+    setTokenAddressToTokenFactoryInfoMap,
+  ] = useState<Map<string, TokenFactoryInfo>>(new Map());
   const [vestees, setVestees] = useState<
     SuperfluidVestooorFactory.VesteeStruct[]
   >([]);
@@ -70,29 +72,14 @@ const Home: NextPage = () => {
 
   const [instanceAddress, setInstanceAddress] = useState("");
   const [instanceDetails, setInstanceDetails] =
-    useState<VestingInstanceDetails>({
-      vestee: "",
-      amountToVest: "",
-      vestingEndDate: new Date(),
-      tokenSymbol: "",
-      tokenName: "",
-      flowingBalanceDetails: { balance: 0, balanceTimestamp: 0, flowRate: "" },
-    });
+    useState<VestingInstanceDetails>(DEFAULT_VESTING_INSTANCE_DETAILS);
 
   // wagmi hooks
   const provider = useProvider();
   const { data: signer } = useSigner();
   const account = useAccount();
 
-  const getTotalFlowedBalance = (
-    totalFlowedData: Balance,
-    flowRate: string
-  ) => {
-    return (
-      totalFlowedData.balance -
-      (time.getTime() / 1000 - totalFlowedData.timestamp) * Number(flowRate)
-    );
-  };
+  // memoized variables
   const remainingVestAmount = useMemo(() => {
     const totalFlowedData: Balance = {
       balance: instanceDetails.flowingBalanceDetails.balance,
@@ -101,7 +88,8 @@ const Home: NextPage = () => {
 
     return getTotalFlowedBalance(
       totalFlowedData,
-      instanceDetails.flowingBalanceDetails.flowRate
+      instanceDetails.flowingBalanceDetails.flowRate,
+      time
     );
   }, [
     time,
@@ -110,7 +98,15 @@ const Home: NextPage = () => {
     instanceDetails.flowingBalanceDetails.flowRate,
   ]);
 
-  const approve = async () => {
+  // helper functions
+  const createVestooorFactoryTxn = async () => {
+    if (factoryCreatorContract && selectedTokenAddress) {
+      await factoryCreatorContract.createFactory(selectedTokenAddress);
+      setRequiresFactoryCreation(false);
+    }
+  };
+
+  const approveTxn = async () => {
     if (underlyingToken && signer && factoryContract) {
       await underlyingToken
         .approve({
@@ -132,30 +128,7 @@ const Home: NextPage = () => {
     }
   };
 
-  const addVestee = async () => {
-    const newVestee: SuperfluidVestooorFactory.VesteeStruct = {
-      vesteeAddress,
-      amountToVest: ethers.utils.parseUnits(vesteeAmountToVest),
-      vestingEndTimestamp: Math.round(vesteeEndTimestamp.getTime() / 1000),
-    };
-    setVestees([...vestees, newVestee]);
-  };
-
-  const updateVestee = async () => {};
-
-  const removeVestee = async () => {};
-
-  const stopVesting = async () => {
-    const superfluidVestooor = new ethers.Contract(
-      instanceAddress,
-      SuperfluidVestooorABI.abi,
-      provider
-    ) as SuperfluidVestooor;
-
-    await superfluidVestooor.connect(signer!).stopVesting();
-  };
-
-  const vest = async () => {
+  const vestTxn = async () => {
     if (!factoryContract || !framework || !signer) return;
     let receipt: ContractReceipt;
     if (vestees.length > 1) {
@@ -180,26 +153,61 @@ const Home: NextPage = () => {
     );
   };
 
-  useEffect(() => {
-    (async () => {
-      const baseObject = {
-        chainId: provider.network.chainId,
-        provider,
-        protocolReleaseVersion: "test", //process.env.IS_DEV ? "test" : "v1",
-      };
-      const frameworkOptions: IFrameworkOptions = process.env.IS_DEV
-        ? {
-            ...baseObject,
-          }
-        : {
-            ...baseObject,
-            resolverAddress: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-          };
-      const sfFramework = await Framework.create(frameworkOptions);
-      setFramework(sfFramework);
-    })();
-  }, []);
+  const stopVestingTxn = async () => {
+    if (!signer) return;
 
+    const superfluidVestooor = SuperfluidVestooor__factory.connect(
+      instanceAddress,
+      signer
+    );
+
+    await superfluidVestooor.stopVesting();
+  };
+
+  const addVestee = async () => {
+    const newVestee: SuperfluidVestooorFactory.VesteeStruct = {
+      vesteeAddress,
+      amountToVest: ethers.utils.parseUnits(vesteeAmountToVest),
+      vestingEndTimestamp: Math.round(vesteeEndTimestamp.getTime() / 1000),
+    };
+    setVestees([...vestees, newVestee]);
+  };
+
+  const updateVestee = async () => {};
+
+  const removeVestee = async () => {};
+
+  const _loadTokenInfo = async (
+    superToken: WrapperSuperToken,
+    factoryAddress: string
+  ) => {
+    if (account.address) {
+      const userBalance = await superToken.balanceOf({
+        account: account.address,
+        providerOrSigner: provider,
+      });
+      const underlyingBalance = await superToken.underlyingToken.balanceOf({
+        account: account.address,
+        providerOrSigner: provider,
+      });
+      const approvedAmount = await superToken.underlyingToken.allowance({
+        owner: account.address,
+        spender: factoryAddress,
+        providerOrSigner: provider,
+      });
+
+      setTokenInfo({
+        userBalance: ethers.utils.formatUnits(userBalance),
+        underlyingBalance: ethers.utils.formatUnits(underlyingBalance),
+        availableToVest: ethers.utils.formatUnits(approvedAmount),
+      });
+      setUnderlyingToken(superToken.underlyingToken);
+    }
+  };
+
+  /** UseEffect Hooks */
+
+  // initialize the time variable
   useEffect(() => {
     (async () => {
       const block = await provider.getBlock("latest");
@@ -207,44 +215,7 @@ const Home: NextPage = () => {
     })();
   }, []);
 
-  // handles loading of tokens
-  // @note TODO: handle native asset vs ERC20 later
-  useEffect(() => {
-    (async () => {
-      if (framework && selectedTokenSymbol) {
-        const superToken = await framework.loadWrapperSuperToken(
-          selectedTokenSymbol
-        );
-        const factoryAddress =
-          symbolToFactoryAddressMap.get(selectedTokenSymbol);
-        if (account.address && factoryAddress) {
-          const userBalance = await superToken.balanceOf({
-            account: account.address,
-            providerOrSigner: provider,
-          });
-          const name = await superToken.name({ providerOrSigner: provider });
-          const underlyingBalance = await superToken.underlyingToken.balanceOf({
-            account: account.address,
-            providerOrSigner: provider,
-          });
-          const approvedAmount = await superToken.underlyingToken.allowance({
-            owner: account.address,
-            spender: factoryAddress,
-            providerOrSigner: provider,
-          });
-
-          setTokenInfo({
-            userBalance: ethers.utils.formatUnits(userBalance),
-            name,
-            underlyingBalance: ethers.utils.formatUnits(underlyingBalance),
-            availableToVest: ethers.utils.formatUnits(approvedAmount),
-          });
-          setUnderlyingToken(superToken.underlyingToken);
-        }
-      }
-    })();
-  }, [framework, selectedTokenSymbol]);
-
+  // update time every second with setTimeout
   useEffect(() => {
     const timer = setTimeout(() => {
       setTime(new Date(time.getTime() + 1000));
@@ -253,19 +224,111 @@ const Home: NextPage = () => {
     return () => clearTimeout(timer);
   });
 
-  // set up contracts
+  // Framework initialization hook
   useEffect(() => {
-    const address = symbolToFactoryAddressMap.get(selectedTokenSymbol);
-    if (address) {
-      setFactoryContract(
-        new ethers.Contract(
-          address,
-          SuperfluidVestooorFactoryABI.abi,
-          provider
-        ) as SuperfluidVestooorFactory
+    (async () => {
+      const baseObject = {
+        chainId: provider.network.chainId,
+        provider,
+        protocolReleaseVersion: process.env.IS_DEV ? "test" : "v1",
+      };
+      const frameworkOptions: IFrameworkOptions = process.env.IS_DEV
+        ? {
+            ...baseObject,
+            resolverAddress: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+          }
+        : {
+            ...baseObject,
+          };
+      const sfFramework = await Framework.create(frameworkOptions);
+      setFramework(sfFramework);
+    })();
+  }, []);
+
+  // get the factory creator contract
+  useEffect(() => {
+    if (signer) {
+      setFactoryCreatorContract(
+        SuperfluidVestooorFactoryCreator__factory.connect(
+          GOERLI_VESTOOOR_FACTORY_CREATOR_ADDRESS,
+          signer
+        )
       );
     }
-  }, [selectedTokenSymbol]);
+  }, [signer]);
+
+  // handles initial loading of listed super tokens
+  useEffect(() => {
+    (async () => {
+      if (framework && factoryCreatorContract) {
+        const tokenAddrToTokenFactoryInfoMap: Map<string, TokenFactoryInfo> =
+          new Map();
+        // get listed super tokens
+        const rawListedSuperTokens = await framework.query.listAllSuperTokens({
+          isListed: true,
+        });
+
+        const listedWrapperSuperTokens = rawListedSuperTokens.data.filter(
+          (x) => x.underlyingAddress !== ethers.constants.AddressZero
+        );
+
+        // get the computed factories with the creator and create a mapping of token address
+        // to factory address and some other details
+        for (let i = 0; i < listedWrapperSuperTokens.length; i++) {
+          const tokenAddress = listedWrapperSuperTokens[i].id;
+          const deterministicFactoryAddress =
+            await factoryCreatorContract.computeAddress(tokenAddress);
+          tokenAddrToTokenFactoryInfoMap.set(tokenAddress, {
+            factory: deterministicFactoryAddress,
+            symbol: listedWrapperSuperTokens[i].symbol,
+            name: listedWrapperSuperTokens[i].name,
+          });
+        }
+        setTokenAddressToTokenFactoryInfoMap(tokenAddrToTokenFactoryInfoMap);
+        setLoading(false);
+      }
+    })();
+  }, [framework, factoryCreatorContract]);
+
+  // handles selection of a token
+  useEffect(() => {
+    (async () => {
+      if (framework && selectedTokenAddress) {
+        const factoryAddress =
+          tokenAddressToTokenFactoryInfoMap.get(selectedTokenAddress)?.factory;
+        if (factoryAddress) {
+          (async () => {
+            const code = await provider.getCode(factoryAddress);
+            setFactoryContract(
+              SuperfluidVestooorFactory__factory.connect(
+                factoryAddress,
+                provider
+              )
+            );
+
+            if (code !== "0x") {
+              setRequiresFactoryCreation(false);
+            } else {
+              setRequiresFactoryCreation(true);
+            }
+          })();
+        }
+      }
+    })();
+  }, [framework, selectedTokenAddress]);
+
+  useEffect(() => {
+    const factoryAddress =
+      tokenAddressToTokenFactoryInfoMap.get(selectedTokenAddress)?.factory;
+    if (framework && requiresFactoryCreation === false && factoryAddress) {
+      (async () => {
+        const superToken = await framework.loadWrapperSuperToken(
+          selectedTokenAddress
+        );
+        await _loadTokenInfo(superToken, factoryAddress);
+      })();
+    }
+  }, [requiresFactoryCreation]);
 
   // load from local storage
   useEffect(() => {
@@ -276,13 +339,11 @@ const Home: NextPage = () => {
 
   // load instance details
   useEffect(() => {
-    console.log({ instanceAddress });
     if (instanceAddress && framework) {
-      const superfluidVestooor = new ethers.Contract(
+      const superfluidVestooor = SuperfluidVestooor__factory.connect(
         instanceAddress,
-        SuperfluidVestooorABI.abi,
         provider
-      ) as SuperfluidVestooor;
+      );
       (async () => {
         const vestee = await superfluidVestooor.vestee();
         const amountToVest = await superfluidVestooor.amountToVest();
@@ -298,14 +359,12 @@ const Home: NextPage = () => {
           providerOrSigner: provider,
           timestamp: currentBlockTime.timestamp,
         });
-        console.log("currentBlockTime.timestamp", currentBlockTime.timestamp);
+
         const vestFlowData = await vestedToken.getFlow({
           sender: instanceAddress,
           receiver: vestee,
           providerOrSigner: provider,
         });
-        console.log({ vestFlowData });
-        console.log(instanceAddress);
         const tokenSymbol = await vestedToken.symbol({
           providerOrSigner: provider,
         });
@@ -356,34 +415,100 @@ const Home: NextPage = () => {
         </i>
         <div className={styles.outerContainer}>
           <div className={styles.insideContainer}>
-            <label htmlFor="tokenToVest">Token to Vest</label>
-            <select onChange={(x) => setSelectedTokenSymbol(x.target.value)}>
-              <option value=""> -- select a token -- </option>
-              {Array.from(symbolToFactoryAddressMap).map((x) => (
+            <label style={{ fontWeight: "bold" }} htmlFor="tokenToVest">
+              1. Token to Vest
+            </label>
+            <select onChange={(x) => setSelectedTokenAddress(x.target.value)}>
+              <option value="">
+                {" "}
+                {loading &&
+                Array.from(tokenAddressToTokenFactoryInfoMap).length === 0
+                  ? "loading..."
+                  : "-- select a token --"}{" "}
+              </option>
+              {Array.from(tokenAddressToTokenFactoryInfoMap).map((x) => (
                 <option key={x[0]} value={x[0]}>
-                  {x[0]}
+                  {x[1].symbol} - {x[1].name}
                 </option>
               ))}
             </select>
-            <p>Token Info</p>
-            <p>Name: {tokenInfo?.name}</p>
-            <p>Symbol: {selectedTokenSymbol}</p>
-            <p>Super Token Balance: {tokenInfo?.userBalance}</p>
-            <p>Underlying Token Balance: {tokenInfo?.underlyingBalance}</p>
-            <p>
-              Approved Underlying Amount To Vest: {tokenInfo?.availableToVest}
-            </p>
-            <label htmlFor="totalVestAmount">Total Vest Amount</label>
-            <input
-              name="totalVestAmount"
-              placeholder="e.g. 42069"
-              value={totalVestAmount}
-              onChange={(e) => setTotalVestAmount(e.target.value)}
-            />
-            <p>This is the total amount you want to vest for your vestee(s).</p>
-            <button onClick={() => approve()}>Approve Vesting Contract</button>
+
+            {tokenAddressToTokenFactoryInfoMap.get(selectedTokenAddress) && (
+              <p>
+                Factory Address:{" "}
+                {
+                  tokenAddressToTokenFactoryInfoMap.get(selectedTokenAddress)!
+                    .factory
+                }
+              </p>
+            )}
+            {requiresFactoryCreation === true && factoryContract != null && (
+              <>
+                <div>
+                  <p style={{ maxWidth: "85%" }}>
+                    Oh no, it looks like a vestooor factory contract is not
+                    deployed for this token yet. Please deploy one if you'd like
+                    to vest.
+                  </p>
+                  <button onClick={() => createVestooorFactoryTxn()}>
+                    Deploy{" "}
+                    {
+                      tokenAddressToTokenFactoryInfoMap.get(
+                        selectedTokenAddress
+                      )?.name
+                    }{" "}
+                    Vestooor Factory Contract
+                  </button>
+                </div>
+              </>
+            )}
+            {(requiresFactoryCreation === false && factoryContract == null) ||
+              (requiresFactoryCreation === false && (
+                <>
+                  <p>Token Info</p>
+                  <p>
+                    Name:{" "}
+                    {
+                      tokenAddressToTokenFactoryInfoMap.get(
+                        selectedTokenAddress
+                      )?.name
+                    }
+                  </p>
+                  <p>
+                    Symbol:{" "}
+                    {
+                      tokenAddressToTokenFactoryInfoMap.get(
+                        selectedTokenAddress
+                      )?.symbol
+                    }
+                  </p>
+                  <p>Super Token Balance: {tokenInfo?.userBalance}</p>
+                  <p>
+                    Underlying Token Balance: {tokenInfo?.underlyingBalance}
+                  </p>
+                  <p>
+                    Approved Underlying Amount To Vest:{" "}
+                    {tokenInfo?.availableToVest}
+                  </p>
+                  <Input
+                    label="Total Vest Amount"
+                    name="totalVestAmount"
+                    placeholder="e.g. 42069"
+                    value={totalVestAmount}
+                    onChange={(e) => setTotalVestAmount(e)}
+                  />
+                  <p>
+                    This is the total amount you want to vest for your
+                    vestee(s).
+                  </p>
+                  <button onClick={() => approveTxn()}>
+                    Approve Vesting Contract
+                  </button>
+                </>
+              ))}
           </div>
           <div className={styles.insideContainer}>
+            <p style={{ fontWeight: "bold" }}>2. Add Vestee(s)</p>
             <p>Vestee(s)</p>
             <select
               className={styles.selectVestee}
@@ -396,24 +521,20 @@ const Home: NextPage = () => {
                 </option>
               ))}
             </select>
-            <div className={styles.vesteeInputContainer}>
-              <label>Vestee Address</label>
-              <input
-                className={styles.vesteeInput}
-                name="vesteeAddress"
-                value={vesteeAddress}
-                onChange={(e) => setVesteeAddress(e.target.value)}
-              />
-            </div>
-            <div className={styles.vesteeInputContainer}>
-              <label>Vestee Vest Amount</label>
-              <input
-                className={styles.vesteeInput}
-                name="vesteeVestAmount"
-                value={vesteeAmountToVest}
-                onChange={(e) => setVesteeAmountToVest(e.target.value)}
-              />
-            </div>
+            <Input
+              label="Vestee Address"
+              name="vesteeAddress"
+              placeholder="e.g. 0xd8da6bf26964af9d7eed9e03e53415d37aa96045"
+              value={vesteeAddress}
+              onChange={(e) => setVesteeAddress(e)}
+            />
+            <Input
+              label="Vestee Vest Amount"
+              name="vesteeVestAmount"
+              placeholder="e.g. 33"
+              value={vesteeAmountToVest}
+              onChange={(e) => setVesteeAmountToVest(e)}
+            />
             <div className={styles.vesteeInputContainer}>
               <label>Vestee End Timestamp</label>
               <DatePicker
@@ -426,7 +547,10 @@ const Home: NextPage = () => {
               <button onClick={() => updateVestee()}>Update Vestee</button>
               <button onClick={() => removeVestee()}>Remove Vestee</button>
             </div>
-            <button onClick={() => vest()}>Vest</button>
+            <p style={{ fontWeight: "bold", paddingRight: "0.5rem" }}>
+              3. Profit
+            </p>
+            <button onClick={() => vestTxn()}>Vest</button>
           </div>
           <div className={styles.insideContainer}>
             <p>Instance Addresses</p>
@@ -443,6 +567,7 @@ const Home: NextPage = () => {
             </p>
             <input
               value={instanceAddress}
+              placeholder="e.g. 0xd8da6bf26964af9d7eed9e03e53415d37aa96045"
               onChange={(e) => setInstanceAddress(e.target.value)}
             />
             <ul>
@@ -485,7 +610,9 @@ const Home: NextPage = () => {
                 </p>
               </>
             )}
-            <button onClick={() => stopVesting()}>Stop Vesting</button>
+            {instanceAddress && (
+              <button onClick={() => stopVestingTxn()}>Stop Vesting</button>
+            )}
           </div>
         </div>
       </main>

@@ -23,13 +23,7 @@ task("deploy-factory", "Deploy the SuperfluidVestooorFactoryCreator contract")
         ethers.constants.AddressZero,
         types.string
     )
-    .addParam(
-        "token",
-        "The vested supertoken contract address",
-        ethers.constants.AddressZero,
-        types.string
-    )
-    .setAction(async ({ implementation, token }, hre) => {
+    .setAction(async ({ implementation }, hre) => {
         const signer = (await hre.ethers.getSigners())[0];
         const framework = await Framework.create({
             provider: hre.ethers.provider,
