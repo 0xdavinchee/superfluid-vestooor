@@ -48,7 +48,7 @@ const Home: NextPage = () => {
   const [loading, setLoading] = useState(true);
   const [totalVestAmount, setTotalVestAmount] = useState("");
   const [selectedTokenAddress, setSelectedTokenAddress] = useState("");
-  const [selectedVestee, setSelectedVestee] = useState("");
+  const [selectedVesteeAddress, setSelectedVesteeAddress] = useState("");
   const [framework, setFramework] = useState<Framework>();
   const [underlyingToken, setUnderlyingToken] = useState<ERC20Token>();
   const [tokenInfo, setTokenInfo] = useState<UserSuperTokenInfo>();
@@ -164,18 +164,43 @@ const Home: NextPage = () => {
     await superfluidVestooor.stopVesting();
   };
 
+  const dateToSecondsTimestamp = (date: Date) =>
+    Math.round(date.getTime() / 1000);
+
   const addVestee = async () => {
     const newVestee: SuperfluidVestooorFactory.VesteeStruct = {
       vesteeAddress,
       amountToVest: ethers.utils.parseUnits(vesteeAmountToVest),
-      vestingEndTimestamp: Math.round(vesteeEndTimestamp.getTime() / 1000),
+      vestingEndTimestamp: dateToSecondsTimestamp(vesteeEndTimestamp),
     };
     setVestees([...vestees, newVestee]);
   };
 
-  const updateVestee = async () => {};
+  const updateVestee = async () => {
+    const index = vestees
+      .map((x) => x.vesteeAddress)
+      .indexOf(selectedVesteeAddress);
+    const newVestee: SuperfluidVestooorFactory.VesteeStruct = {
+      vesteeAddress: selectedVesteeAddress,
+      amountToVest: vesteeAmountToVest,
+      vestingEndTimestamp: dateToSecondsTimestamp(vesteeEndTimestamp),
+    };
+    const newVestees = [
+      ...vestees.slice(0, index),
+      newVestee,
+      ...vestees.slice(index),
+    ];
 
-  const removeVestee = async () => {};
+    if (index >= 0) {
+      setVestees(newVestees);
+    }
+  };
+
+  const removeVestee = async () => {
+    setVestees(
+      vestees.filter((x) => x.vesteeAddress !== selectedVesteeAddress)
+    );
+  };
 
   const _loadTokenInfo = async (
     superToken: WrapperSuperToken,
@@ -513,10 +538,13 @@ const Home: NextPage = () => {
             <select
               className={styles.selectVestee}
               size={5}
-              onChange={(e) => setSelectedVestee(e.target.value)}
+              onChange={(e) => setSelectedVesteeAddress(e.target.value)}
             >
               {vestees.map((x) => (
-                <option key={x.vesteeAddress as string}>
+                <option
+                  key={x.vesteeAddress as string}
+                  value={x.vesteeAddress as string}
+                >
                   {x.vesteeAddress as string}
                 </option>
               ))}
