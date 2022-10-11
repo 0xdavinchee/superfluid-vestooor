@@ -31,15 +31,12 @@ Check out the `.env.example` file to see what sort of environment variables to p
 **Steps**
 
 1. Deploy the `SuperfluidVestooor` implementation contract with: `npx hardhat run scripts/runDeploySuperfluidVestooor.ts --network <NETWORK_NAME>`. Make sure to save the address, this is the `<IMPLEMENTATION_ADDRESS>` used below.
-2. Deploy the `SuperfluidVestooorFactory` contract with: `npx hardhat deploy-factory --implementation <IMPLEMENTATION_ADDRESS> --token <SUPER_TOKEN_ADDRESS> --network <NETWORK_NAME>`.
+2. Deploy the `SuperfluidVestooorFactoryCreator` contract with: `npx hardhat deploy-factory --implementation <IMPLEMENTATION_ADDRESS> --network <NETWORK_NAME>`.
+   > Note: It is advised to deploy contracts via this factory creator to enable deterministic factory addresses that you can trust.
 
 This will deploy the contracts, wait for several confirmations and then verify the contracts.
 
-If you want to manually verify contracts, you can use the following command: `npx hardhat verify --network <NETWORK_NAME> DEPLOYED_CONTRACT_ADDRESS "Constructor argument 1" `
-
-### Foundry
-
-<!--TODO-->
+If you want to manually verify contracts, you can use the following command: `npx hardhat verify --network <NETWORK_NAME> DEPLOYED_CONTRACT_ADDRESS "Constructor argument 1"`
 
 ## Useful Commands
 
